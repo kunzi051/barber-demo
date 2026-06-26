@@ -140,7 +140,8 @@ func _start_dialogue() -> void:
 	interaction_label.hide()
 	dialogue_panel.show()
 	if dialogue_panel.has_method("start_dialogue"):
-		dialogue_panel.start_dialogue("li_ming")
+		var cust_data: Dictionary = GameState.get_current_customer_data()
+		dialogue_panel.start_dialogue(cust_data)
 
 
 func _on_dialogue_finished() -> void:

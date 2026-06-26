@@ -2,6 +2,8 @@ extends Control
 
 class_name DialogueController
 
+enum DialogueState { TYPING, WAITING_FOR_CONTINUE, WAITING_FOR_CHOICE, FINISHED }
+
 @onready var customer_name_label: Label = $CustomerNameLabel
 @onready var dialogue_text_label: Label = $DialogueTextLabel
 @onready var options_container: VBoxContainer = $OptionsContainer
@@ -10,29 +12,30 @@ class_name DialogueController
 var dialogue_data: Dictionary = {}
 var current_round_id: String = ""
 var current_round_data: Dictionary = {}
-var is_type_writing: bool = false
+var state: int = DialogueState.FINISHED
+var typing_tween: Tween = null
 var full_text: String = ""
-var type_speed: float = 0.03
-var type_timer: float = 0.0
-var type_index: int = 0
-var text_revealed: bool = false
-var waiting_for_next: bool = false
-var dialogue_complete: bool = false
+var input_locked: bool = false
 
 signal dialogue_finished
 
 
 func _ready() -> void:
 	portrait_rect.color = Color(0.9, 0.8, 0.7)
-	customer_name_label.text = "李明"
 
 
-func start_dialogue(customer_id: String) -> void:
-	dialogue_data = JSONLoader.load_json("res://data/dialogues/" + customer_id + "_dialogue.json")
+func start_dialogue(customer_data: Dictionary) -> void:
+	var dialogue_path: String = customer_data.get("dialogue_file", "")
+	if dialogue_path.is_empty():
+		dialogue_path = "res://data/dialogues/" + customer_data.get("id", "") + "_dialogue.json"
+	
+	dialogue_data = JSONLoader.load_json(dialogue_path)
 	if dialogue_data.is_empty():
-		push_error("Failed to load dialogue data for: " + customer_id)
+		push_error("Failed to load dialogue data for: " + customer_data.get("id", ""))
 		emit_signal("dialogue_finished")
 		return
+	
+	customer_name_label.text = customer_data.get("name", "客人")
 	
 	GameState.dialogue_understanding_score = 0
 	GameState.customer_trust = 0
@@ -61,45 +64,60 @@ func _show_round(round_id: String) -> void:
 		return
 	
 	current_round_data = round_data
-	text_revealed = false
-	waiting_for_next = false
-	
 	full_text = round_data.get("text", "")
-	dialogue_text_label.text = ""
-	type_index = 0
-	type_timer = 0.0
-	is_type_writing = true
 	
 	_clear_options()
+	_start_typing(full_text)
+
+
+func _start_typing(text: String) -> void:
+	_stop_typing_tween()
 	
-	await get_tree().process_frame
+	dialogue_text_label.text = text
+	dialogue_text_label.visible_characters = 0
+	state = DialogueState.TYPING
+	input_locked = false
+	
+	typing_tween = create_tween()
+	typing_tween.tween_property(dialogue_text_label, "visible_characters", -1, len(text) * 0.025)
+	typing_tween.finished.connect(_on_typing_finished)
 
 
-func _process(delta: float) -> void:
-	if is_type_writing:
-		type_timer += delta
-		while type_timer >= type_speed and type_index < len(full_text):
-			dialogue_text_label.text += full_text[type_index]
-			type_index += 1
-			type_timer -= type_speed
-		
-		if type_index >= len(full_text):
-			is_type_writing = false
-			text_revealed = true
-			_show_options()
+func _stop_typing_tween() -> void:
+	if typing_tween != null and typing_tween.is_valid():
+		typing_tween.kill()
+	typing_tween = null
 
 
-func _show_options() -> void:
-	_clear_options()
+func _finish_current_line_immediately() -> void:
+	_stop_typing_tween()
+	dialogue_text_label.visible_characters = -1
+	_on_typing_finished()
+
+
+func _on_typing_finished() -> void:
+	_stop_typing_tween()
+	
+	if state == DialogueState.FINISHED:
+		return
+	
 	var options: Array = current_round_data.get("options", [])
 	if options.is_empty():
 		var next_id = current_round_data.get("next_round", "")
-		if next_id:
-			_show_round(next_id)
+		if next_id and not next_id.is_empty():
+			state = DialogueState.WAITING_FOR_CONTINUE
+			input_locked = false
 		else:
 			_show_summary()
 		return
 	
+	state = DialogueState.WAITING_FOR_CHOICE
+	input_locked = false
+	_show_options(options)
+
+
+func _show_options(options: Array) -> void:
+	_clear_options()
 	for opt in options:
 		var btn: Button = Button.new()
 		btn.text = opt.get("text", "")
@@ -107,6 +125,11 @@ func _show_options() -> void:
 		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn.connect("pressed", Callable(self, "_on_option_selected").bind(opt))
 		options_container.add_child(btn)
+	
+	await get_tree().create_timer(0.1).timeout
+	for child in options_container.get_children():
+		if child is Button:
+			child.disabled = false
 
 
 func _clear_options() -> void:
@@ -115,14 +138,19 @@ func _clear_options() -> void:
 
 
 func _on_option_selected(option: Dictionary) -> void:
-	if not text_revealed:
+	if state != DialogueState.WAITING_FOR_CHOICE:
 		return
+	
+	# Disable all buttons immediately to prevent double-click
+	_set_options_disabled(true)
 	
 	var effects: Dictionary = option.get("effects", {})
 	GameState.dialogue_understanding_score += effects.get("understanding", 0)
 	GameState.customer_trust += effects.get("trust", 0)
 	if effects.get("revealed_hidden_need", false):
 		GameState.revealed_hidden_need = true
+	
+	_clear_options()
 	
 	var next_id = option.get("next_round", "")
 	if next_id and not next_id.is_empty():
@@ -131,9 +159,16 @@ func _on_option_selected(option: Dictionary) -> void:
 		_show_summary()
 
 
+func _set_options_disabled(disabled: bool) -> void:
+	for child in options_container.get_children():
+		if child is Button:
+			child.disabled = disabled
+
+
 func _show_summary() -> void:
-	dialogue_complete = true
+	state = DialogueState.FINISHED
 	dialogue_text_label.text = dialogue_data.get("summary", "我明白了你的需求。")
+	dialogue_text_label.visible_characters = -1
 	_clear_options()
 	
 	var btn: Button = Button.new()
@@ -142,16 +177,34 @@ func _show_summary() -> void:
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	btn.connect("pressed", Callable(self, "_on_start_haircut"))
 	options_container.add_child(btn)
+	
+	await get_tree().create_timer(0.15).timeout
+	btn.disabled = false
 
 
 func _on_start_haircut() -> void:
+	state = DialogueState.FINISHED
 	emit_signal("dialogue_finished")
 
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if is_type_writing:
-			is_type_writing = false
-			dialogue_text_label.text = full_text
-			text_revealed = true
-			_show_options()
+	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
+		return
+	if input_locked:
+		return
+	if state == DialogueState.FINISHED:
+		return
+	
+	accept_event()
+	
+	match state:
+		DialogueState.TYPING:
+			input_locked = true
+			_finish_current_line_immediately()
+		DialogueState.WAITING_FOR_CONTINUE:
+			input_locked = true
+			var next_id = current_round_data.get("next_round", "")
+			if next_id and not next_id.is_empty():
+				_show_round(next_id)
+		DialogueState.WAITING_FOR_CHOICE:
+			pass
