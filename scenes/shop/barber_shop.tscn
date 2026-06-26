@@ -92,6 +92,73 @@ theme_override_font_sizes/font_size = 20
 [node name="DialoguePanel" parent="CanvasLayer" instance=ExtResource("4")]
 visible = false
 
+[node name="MoveTutorial" type="Control" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 440.0
+offset_top = 480.0
+offset_right = 840.0
+offset_bottom = 530.0
+visible = true
+
+[node name="MoveTutorialBg" type="ColorRect" parent="CanvasLayer/MoveTutorial"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.2, 0.15, 0.1, 0.8)
+
+[node name="MoveTutorialLabel" type="Label" parent="CanvasLayer/MoveTutorial"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 390.0
+offset_bottom = 45.0
+text = "点击店铺地面，让理发师移动"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+modulate = Color(1, 1, 1, 1)
+
+[node name="EmotionLabel" type="Label" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 700.0
+offset_top = 120.0
+offset_right = 900.0
+offset_bottom = 145.0
+text = ""
+theme_override_font_sizes/font_size = 14
+modulate = Color(0.6, 0.3, 0.2, 1)
+
+[node name="TalkTutorial" type="Control" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 440.0
+offset_top = 80.0
+offset_right = 840.0
+offset_bottom = 130.0
+visible = false
+
+[node name="TalkTutorialBg" type="ColorRect" parent="CanvasLayer/TalkTutorial"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.2, 0.15, 0.1, 0.8)
+
+[node name="TalkTutorialLabel" type="Label" parent="CanvasLayer/TalkTutorial"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 390.0
+offset_bottom = 45.0
+text = "点击"与客人交谈""
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+modulate = Color(1, 1, 1, 1)
+
 [node name="TransitionOverlay" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15

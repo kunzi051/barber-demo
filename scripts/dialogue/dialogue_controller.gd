@@ -141,7 +141,6 @@ func _on_option_selected(option: Dictionary) -> void:
 	if state != DialogueState.WAITING_FOR_CHOICE:
 		return
 	
-	# Disable all buttons immediately to prevent double-click
 	_set_options_disabled(true)
 	
 	var effects: Dictionary = option.get("effects", {})
@@ -150,6 +149,20 @@ func _on_option_selected(option: Dictionary) -> void:
 	if effects.get("revealed_hidden_need", false):
 		GameState.revealed_hidden_need = true
 	
+	# Apply emotion from dialogue effects
+	var emo_str: String = effects.get("emotion", "")
+	if not emo_str.is_empty():
+		_set_customer_emotion(emo_str)
+	elif effects.get("understanding", 0) >= 2:
+		# Auto-map positive understanding to relaxed
+		var parent_shop = get_parent().get_parent()
+		if parent_shop and parent_shop.has_method("set_customer_emotion"):
+			parent_shop.set_customer_emotion("relaxed")
+	elif effects.get("understanding", 0) <= -1:
+		var parent_shop = get_parent().get_parent()
+		if parent_shop and parent_shop.has_method("set_customer_emotion"):
+			parent_shop.set_customer_emotion("worried")
+	
 	_clear_options()
 	
 	var next_id = option.get("next_round", "")
@@ -157,6 +170,13 @@ func _on_option_selected(option: Dictionary) -> void:
 		_show_round(next_id)
 	else:
 		_show_summary()
+
+
+func _set_customer_emotion(emo_str: String) -> void:
+	GameState.customer_emotion = emo_str
+	var parent_shop = get_parent().get_parent()
+	if parent_shop and parent_shop.has_method("set_customer_emotion"):
+		parent_shop.set_customer_emotion(emo_str)
 
 
 func _set_options_disabled(disabled: bool) -> void:

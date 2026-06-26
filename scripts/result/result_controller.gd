@@ -15,6 +15,7 @@ class_name ResultController
 @onready var before_portrait: ColorRect = $ResultPanel/BeforeAfter/BeforePortrait
 @onready var after_portrait: ColorRect = $ResultPanel/BeforeAfter/AfterPortrait
 @onready var before_after_container: Control = $ResultPanel/BeforeAfter
+@onready var emotion_result_label: Label = $ResultPanel/EmotionResultLabel
 
 
 func _ready() -> void:
@@ -54,8 +55,30 @@ func _display_results() -> void:
 	
 	customer_feedback_label.text = GameState.customer_feedback
 	
+	_update_emotion_display()
 	_update_before_after()
 	_update_button()
+
+
+func _update_emotion_display() -> void:
+	var emo: String = GameState.customer_emotion
+	if emo.is_empty():
+		var cust_data: Dictionary = GameState.get_current_customer_data()
+		emo = cust_data.get("initial_emotion", "neutral")
+	var mapping: Dictionary = {
+		"nervous": "有些紧张", "neutral": "平静", "relaxed": "放松了一些",
+		"trusting": "比较信任", "worried": "有些担心", "satisfied": "非常满意",
+		"disappointed": "有些失望", "interested": "感兴趣"
+	}
+	var score: int = GameState.final_score
+	if score >= 90:
+		emo = "satisfied"
+	elif score >= 75:
+		emo = "relaxed"
+	elif score < 60:
+		emo = "disappointed"
+	if is_instance_valid(emotion_result_label):
+		emotion_result_label.text = "客人情绪：" + mapping.get(emo, "平静")
 
 
 func _update_before_after() -> void:

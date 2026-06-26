@@ -1,179 +1,151 @@
 {
-  "customer_id": "li_ming",
-  "greeting": "你好，帮我稍微剪短一点，看起来精神些就好。",
+  "id": "li_ming_dialogue",
+  "intro": "你好，我想理个发。",
+  "summary": "好的，我明白了，大概就是剪短一些，保持职场形象。",
   "rounds": [
     {
-      "id": "round_1",
+      "id": "greeting",
       "speaker": "customer",
-      "text": "你好，帮我稍微剪短一点，看起来精神些就好。",
+      "text": "你好，请问现在可以理发吗？",
       "options": [
         {
-          "id": "a",
-          "text": "明天是不是有什么重要场合？",
+          "text": "当然可以，请到这边坐。（微笑）",
+          "next_round": "ask_need",
           "effects": {
-            "understanding": 2,
-            "trust": 1
-          },
-          "next_round": "round_2_reveal"
-        },
-        {
-          "id": "b",
-          "text": "好，那我直接把两边全部推短。",
-          "effects": {
-            "understanding": -1,
-            "trust": -1
-          },
-          "next_round": "round_2"
-        },
-        {
-          "id": "c",
-          "text": "你平时喜欢什么发型？",
-          "effects": {
+            "trust": 1,
             "understanding": 1,
-            "trust": 0
-          },
-          "next_round": "round_2"
-        }
-      ]
-    },
-    {
-      "id": "round_2",
-      "speaker": "customer",
-      "text": "也没什么特别的，就是希望看起来干净整齐一些。",
-      "options": [
-        {
-          "id": "a",
-          "text": "那我们做得干净一些，但不要变化太大。",
-          "effects": {
-            "understanding": 2,
-            "trust": 2
-          },
-          "next_round": "round_2b"
+            "emotion": "relaxed"
+          }
         },
         {
-          "id": "b",
-          "text": "剪短了就整齐了，放心。",
+          "text": "可以，你先坐下吧。",
+          "next_round": "ask_need",
           "effects": {
+            "trust": 0,
             "understanding": 0,
-            "trust": 0
-          },
-          "next_round": "round_2b"
+            "emotion": "neutral"
+          }
         },
         {
-          "id": "c",
-          "text": "不用担心，先说说你平时怎么打理头发。",
+          "text": "等一下，我先收拾一下。",
+          "next_round": "ask_need",
           "effects": {
+            "trust": -1,
+            "understanding": 0,
+            "emotion": "worried"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ask_need",
+      "speaker": "customer",
+      "text": "我想把头发稍微剪短一些，看起来精神点。",
+      "options": [
+        {
+          "text": "好的，你是想要比较清爽干练的感觉吧？",
+          "next_round": "detail",
+          "effects": {
+            "trust": 1,
+            "understanding": 2,
+            "emotion": "trusting"
+          }
+        },
+        {
+          "text": "明白，想修短一些。工作场合用吗？",
+          "next_round": "detail",
+          "effects": {
+            "trust": 1,
             "understanding": 1,
-            "trust": 1
-          },
-          "next_round": "round_2b"
+            "emotion": "relaxed"
+          }
+        },
+        {
+          "text": "嗯，剪短是吧？行，交给我。",
+          "next_round": "detail",
+          "effects": {
+            "trust": 0,
+            "understanding": 0,
+            "emotion": "neutral"
+          }
         }
       ]
     },
     {
-      "id": "round_2_reveal",
+      "id": "detail",
       "speaker": "customer",
-      "text": "嗯…其实我明天要参加第一次正式面试，有点紧张。",
+      "text": "嗯，我平时要上班，想看起来专业一些。不过不要太短，稍微有型就好。",
       "options": [
         {
-          "id": "a",
-          "text": "那我们做得干净一些，但不要变化太大。",
+          "text": "那我觉得自然侧分的风格很适合你，上班不会太夸张，又显得精神。",
+          "next_round": "hidden_need",
           "effects": {
-            "understanding": 2,
             "trust": 2,
-            "revealed_hidden_need": true
-          },
-          "next_round": "round_3"
-        },
-        {
-          "id": "b",
-          "text": "面试就应该直接剪成寸头，显得精神。",
-          "effects": {
-            "understanding": -2,
-            "trust": -1
-          },
-          "next_round": "round_3"
-        },
-        {
-          "id": "c",
-          "text": "不用担心，先说说你平时怎么打理头发。",
-          "effects": {
-            "understanding": 2,
-            "trust": 1
-          },
-          "next_round": "round_3"
-        }
-      ]
-    },
-    {
-      "id": "round_2b",
-      "speaker": "customer",
-      "text": "其实…明天有个重要的面试，我希望看起来可靠些。",
-      "options": [
-        {
-          "id": "a",
-          "text": "那我们做得干净一些，但不要变化太大。",
-          "effects": {
-            "understanding": 2,
-            "trust": 2,
-            "revealed_hidden_need": true
-          },
-          "next_round": "round_3"
-        },
-        {
-          "id": "b",
-          "text": "面试就应该直接剪成寸头，显得精神。",
-          "effects": {
-            "understanding": -2,
-            "trust": -1
-          },
-          "next_round": "round_3"
-        },
-        {
-          "id": "c",
-          "text": "不用担心，先说说你平时怎么打理头发。",
-          "effects": {
-            "understanding": 1,
-            "trust": 1
-          },
-          "next_round": "round_3"
-        }
-      ]
-    },
-    {
-      "id": "round_3",
-      "speaker": "customer",
-      "text": "我平时不太会打理，也不希望早上花很多时间。",
-      "options": [
-        {
-          "id": "a",
-          "text": "保留顶部长度，做一个容易整理的自然短侧分。",
-          "effects": {
             "understanding": 3,
-            "trust": 2
-          },
-          "next_round": null
+            "revealed_hidden_need": true,
+            "emotion": "satisfied"
+          }
         },
         {
-          "id": "b",
-          "text": "每天用很多发蜡就能解决。",
+          "text": "那我帮你整体剪短，上面留一点长度，可以打理成型。",
+          "next_round": "confirm",
           "effects": {
-            "understanding": -1,
-            "trust": 0
-          },
-          "next_round": null
+            "trust": 1,
+            "understanding": 2,
+            "emotion": "trusting"
+          }
         },
         {
-          "id": "c",
-          "text": "那就全部剪到一样短。",
+          "text": "两边推短，上面剪短一些，怎么样？",
+          "next_round": "confirm",
           "effects": {
-            "understanding": -2,
-            "trust": -1
-          },
-          "next_round": null
+            "trust": 0,
+            "understanding": 1,
+            "emotion": "neutral"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hidden_need",
+      "speaker": "customer",
+      "text": "对！我就是想要那种感觉，你说到点子上了！我之前还不太好意思说想要侧分，怕太麻烦。",
+      "options": [
+        {
+          "text": "不麻烦，这种风格很适合你，我们开始吧。",
+          "next_round": "",
+          "effects": {
+            "trust": 2,
+            "understanding": 2,
+            "emotion": "relaxed"
+          }
+        },
+        {
+          "text": "那就这样定了，保证让你满意。",
+          "next_round": "",
+          "effects": {
+            "trust": 1,
+            "understanding": 1,
+            "emotion": "trusting"
+          }
+        }
+      ]
+    },
+    {
+      "id": "confirm",
+      "speaker": "customer",
+      "text": "好的，那就麻烦你了。",
+      "next_round": "",
+      "options": [
+        {
+          "text": "不客气，我们开始吧。",
+          "effects": {
+            "trust": 1,
+            "understanding": 0,
+            "emotion": "neutral"
+          }
         }
       ]
     }
-  ],
-  "summary": "我明白了：两侧清爽，顶部保留长度，做一个自然、正式、容易整理的短侧分。"
+  ]
 }

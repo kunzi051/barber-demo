@@ -17,8 +17,7 @@ func _test_game_state() -> void:
 	assert(gs.customer_trust == 0, "customer_trust should be 0")
 	assert(gs.revealed_hidden_need == false, "revealed_hidden_need should be false")
 	assert(gs.current_hair_state.get("top") == 3, "top should be 3")
-	assert(gs.current_hair_state.get("parting") == "none", "parting should be none")
-	assert(gs.current_hair_state.get("styled") == false, "styled should be false")
+	assert(gs.current_hair_state.get("style_type") == "none", "style_type should be none")
 	print("GameState: OK")
 
 
@@ -32,23 +31,23 @@ func _test_json_loader() -> void:
 
 func _test_haircut_scoring() -> void:
 	var current: Dictionary = {
-		"bangs": 2, "top": 2, "left_side": 1, "right_side": 1, "back": 1,
-		"parting": "left", "styled": true
+		"bangs": 2, "top": 1, "left_side": 1, "right_side": 1, "back": 1,
+		"style_type": "natural_left_part"
 	}
 	var target: Dictionary = {
-		"bangs": 2, "top": 2, "left_side": 1, "right_side": 1, "back": 1,
-		"parting": "left", "styled": true
+		"bangs": 2, "top": 1, "left_side": 1, "right_side": 1, "back": 1,
+		"style_type": "natural_left_part"
 	}
 	
-	var result: Dictionary = HaircutScoring.calculate_score(current, target, 10, true, 0, 5, 60.0)
+	var result: Dictionary = HaircutScoring.calculate_score(current, target, 10, true, 0, 5, 60.0, "", "", {})
 	assert(result.get("total", 0) >= 90, "perfect hair should score >= 90")
 	print("HaircutScoring (perfect): " + str(result.get("total", 0)))
 	
 	var bad_current: Dictionary = {
 		"bangs": 0, "top": 0, "left_side": 0, "right_side": 0, "back": 0,
-		"parting": "none", "styled": false
+		"style_type": "none"
 	}
-	var bad_result: Dictionary = HaircutScoring.calculate_score(bad_current, target, -5, false, 5, 20, 200.0)
+	var bad_result: Dictionary = HaircutScoring.calculate_score(bad_current, target, -5, false, 5, 20, 200.0, "", "", {})
 	assert(bad_result.get("total", 100) < 50, "bad hair should score < 50")
 	print("HaircutScoring (bad): " + str(bad_result.get("total", 0)))
 	print("HaircutScoring: OK")

@@ -1,0 +1,18 @@
+{
+  "id": "li_ming_scoring",
+  "weights": {
+    "region_accuracy": 40,
+    "style_match": 20,
+    "understanding_bonus": 15,
+    "hidden_need_bonus": 10,
+    "mistake_penalty": -10,
+    "efficiency_bonus": 5
+  },
+  "region_mapping": {
+    "bangs": "bangs",
+    "top": "top",
+    "left_side": "left_side",
+    "right_side": "right_side",
+    "back": "back"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "清爽职场侧分",
+  "style_type": "natural_left_part",
+  "regions": {
+    "bangs": 2,
+    "top": 1,
+    "left_side": 1,
+    "right_side": 1,
+    "back": 1
+  }
+}

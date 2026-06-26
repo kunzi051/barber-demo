@@ -25,6 +25,8 @@ var elapsed_haircut_time: float = 0.0
 var shop_move_tutorial_completed: bool = false
 var talk_tutorial_completed: bool = false
 var haircut_tutorial_completed: bool = false
+var haircut_tutorial_dismissed: bool = false
+var customer_emotion: String = ""
 
 # Final results
 var final_score: int = 0
@@ -53,10 +55,12 @@ func reset_demo() -> void:
 	shop_move_tutorial_completed = false
 	talk_tutorial_completed = false
 	haircut_tutorial_completed = false
+	haircut_tutorial_dismissed = false
 	
 	final_score = 0
 	score_breakdown = {}
 	customer_feedback = ""
+	customer_emotion = ""
 
 
 func start_day(customer_ids: Array[String]) -> void:
@@ -71,6 +75,7 @@ func tutorial_reset() -> void:
 	shop_move_tutorial_completed = false
 	talk_tutorial_completed = false
 	haircut_tutorial_completed = false
+	haircut_tutorial_dismissed = false
 
 
 func load_current_customer() -> bool:

@@ -1,0 +1,16 @@
+{
+  "id": "li_ming_feedback",
+  "templates": {
+    "excellent": "非常满意！%s看起来很完美。",
+    "good": "不错，%s看起来好多了。",
+    "average": "嗯，还行吧，%s基本达到了要求。",
+    "poor": "这个...%s不是很满意。"
+  },
+  "region_comments": {
+    "bangs": "刘海",
+    "top": "顶部",
+    "left_side": "左侧",
+    "right_side": "右侧",
+    "back": "后脑"
+  }
+}

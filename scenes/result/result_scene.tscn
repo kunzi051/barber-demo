@@ -161,6 +161,17 @@ offset_top = 250.0
 offset_right = 460.0
 offset_bottom = 370.0
 
+[node name="EmotionResultLabel" type="Label" parent="ResultPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 240.0
+offset_right = 300.0
+offset_bottom = 265.0
+text = ""
+theme_override_font_sizes/font_size = 14
+modulate = Color(0.6, 0.3, 0.2, 1)
+
 [node name="CustomerFeedbackLabel" type="Label" parent="ResultPanel"]
 layout_mode = 1
 anchors_preset = 0

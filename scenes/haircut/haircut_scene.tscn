@@ -53,6 +53,17 @@ text = "需求：稍微剪短，精神一些"
 theme_override_font_sizes/font_size = 16
 modulate = Color(0.3, 0.3, 0.3, 1)
 
+[node name="HaircutEmotionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 610.0
+offset_top = 10.0
+offset_right = 900.0
+offset_bottom = 35.0
+text = ""
+theme_override_font_sizes/font_size = 14
+modulate = Color(0.6, 0.3, 0.2, 1)
+
 [node name="HairContainer" type="Node2D" parent="."]
 position = Vector2(350, 250)
 
@@ -317,5 +328,45 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 0, 0, 0)
 mouse_filter = 2
+
+[node name="HaircutTutorial" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 200.0
+offset_top = 300.0
+offset_right = 700.0
+offset_bottom = 430.0
+
+[node name="TutorialTitle" type="Label" parent="HaircutTutorial"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = 485.0
+offset_bottom = 35.0
+text = "理发步骤"
+theme_override_font_sizes/font_size = 18
+
+[node name="TutorialText" type="Label" parent="HaircutTutorial"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 15.0
+offset_top = 40.0
+offset_right = 485.0
+offset_bottom = 100.0
+text = "1. 选择一种工具\n2. 点击客人的头发区域\n3. 根据沟通获得的需求完成发型"
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 2
+
+[node name="TutorialClose" type="Button" parent="HaircutTutorial"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 420.0
+offset_top = 5.0
+offset_right = 470.0
+offset_bottom = 28.0
+text = "x"
+theme_override_font_sizes/font_size = 12
+custom_minimum_size = Vector2(30, 23)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

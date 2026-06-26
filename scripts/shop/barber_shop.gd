@@ -14,6 +14,9 @@ class_name BarberShop
 @onready var mirror: ColorRect = $Mirror
 @onready var counter: ColorRect = $Counter
 @onready var entrance: ColorRect = $Entrance
+@onready var move_tutorial: Control = $CanvasLayer/MoveTutorial
+@onready var talk_tutorial: Control = $CanvasLayer/TalkTutorial
+@onready var emotion_label: Label = $CanvasLayer/EmotionLabel
 
 const WALK_SPEED: float = 300.0
 const INTERACT_DISTANCE: float = 80.0
@@ -22,6 +25,7 @@ var is_moving: bool = false
 var target_position: Vector2 = Vector2.ZERO
 var dialogue_active: bool = false
 var dialogue_finished: bool = false
+var prev_moving: bool = false
 
 
 func _ready() -> void:
@@ -29,20 +33,17 @@ func _ready() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(transition_overlay, "modulate", Color(0, 0, 0, 0), 0.5)
 	
-	barber.position = Vector2(200, 350)
-	customer.position = Vector2(750, 250)
-	
-	talk_button.hide()
-	interaction_label.hide()
-	dialogue_panel.hide()
+	_setup_shop()
 	
 	if dialogue_panel.has_signal("dialogue_finished"):
 		dialogue_panel.connect("dialogue_finished", Callable(self, "_on_dialogue_finished"))
 	
-	_setup_shop_background()
+	_setup_customer()
 
 
-func _setup_shop_background() -> void:
+func _setup_shop() -> void:
+	barber.position = Vector2(200, 350)
+	
 	shop_background.color = Color(0.95, 0.88, 0.75)
 	floor_area.color = Color(0.55, 0.35, 0.2)
 	barber_chair.color = Color(0.6, 0.2, 0.2)
@@ -50,6 +51,21 @@ func _setup_shop_background() -> void:
 	mirror.modulate = Color(0.8, 0.85, 0.9, 0.5)
 	counter.color = Color(0.7, 0.6, 0.4)
 	entrance.color = Color(0.9, 0.8, 0.6)
+	
+	talk_button.hide()
+	interaction_label.hide()
+	dialogue_panel.hide()
+	move_tutorial.visible = not GameState.shop_move_tutorial_completed
+	talk_tutorial.visible = false
+	emotion_label.hide()
+
+
+func _setup_customer() -> void:
+	var cust_data: Dictionary = GameState.get_current_customer_data()
+	customer.position = Vector2(750, 250)
+	
+	if customer.has_method("setup"):
+		customer.setup(cust_data)
 
 
 func _process(delta: float) -> void:
@@ -59,6 +75,10 @@ func _process(delta: float) -> void:
 	_handle_input(delta)
 	_update_movement(delta)
 	_check_interaction()
+	
+	if is_moving and not prev_moving:
+		_on_started_moving()
+	prev_moving = is_moving
 
 
 func _handle_input(delta: float) -> void:
@@ -73,6 +93,8 @@ func _handle_input(delta: float) -> void:
 		input_dir.y += 1
 	
 	if input_dir != Vector2.ZERO:
+		if not is_moving:
+			_on_started_moving()
 		is_moving = true
 		target_position = barber.position + input_dir * 200.0
 		_clamp_barber_position()
@@ -90,8 +112,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		var click_pos: Vector2 = get_global_mouse_position()
 		if click_pos.y > 200 and click_pos.y < 500 and click_pos.x > 50 and click_pos.x < 1230:
+			if not is_moving:
+				_on_started_moving()
 			target_position = Vector2(clampf(click_pos.x, 100, 1180), clampf(click_pos.y, 220, 480))
 			is_moving = true
+
+
+func _on_started_moving() -> void:
+	if not GameState.shop_move_tutorial_completed:
+		GameState.shop_move_tutorial_completed = true
+		_hide_move_tutorial()
+
+
+func _hide_move_tutorial() -> void:
+	if is_instance_valid(move_tutorial):
+		move_tutorial.visible = false
 
 
 func _update_movement(delta: float) -> void:
@@ -122,15 +157,23 @@ func _check_interaction() -> void:
 	if dist < INTERACT_DISTANCE and not dialogue_finished:
 		talk_button.show()
 		interaction_label.show()
+		if not GameState.talk_tutorial_completed:
+			talk_tutorial.visible = true
 	else:
 		talk_button.hide()
 		interaction_label.hide()
+		talk_tutorial.visible = false
 
 
 func _on_talk_button_pressed() -> void:
 	if dialogue_finished:
 		_on_start_haircut_pressed()
 		return
+	
+	if not GameState.talk_tutorial_completed:
+		GameState.talk_tutorial_completed = true
+		talk_tutorial.visible = false
+	
 	_start_dialogue()
 
 
@@ -138,6 +181,7 @@ func _start_dialogue() -> void:
 	dialogue_active = true
 	talk_button.hide()
 	interaction_label.hide()
+	talk_tutorial.visible = false
 	dialogue_panel.show()
 	if dialogue_panel.has_method("start_dialogue"):
 		var cust_data: Dictionary = GameState.get_current_customer_data()
@@ -156,6 +200,21 @@ func show_go_to_haircut() -> void:
 	interaction_label.show()
 	talk_button.text = "开始理发"
 	talk_button.show()
+
+
+func set_customer_emotion(emo_str: String) -> void:
+	if not is_instance_valid(customer):
+		return
+	var mapping: Dictionary = {
+		"nervous": 0, "neutral": 1, "relaxed": 2, "trusting": 3,
+		"worried": 4, "satisfied": 5, "disappointed": 6, "interested": 7
+	}
+	var emo_val: int = mapping.get(emo_str, 1)
+	if customer.has_method("set_emotion"):
+		customer.set_emotion(emo_val)
+	if customer.has_method("get_emotion_text"):
+		emotion_label.text = "客人：" + customer.get_emotion_text()
+		emotion_label.show()
 
 
 func _on_start_haircut_pressed() -> void:

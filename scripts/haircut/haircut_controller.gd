@@ -23,6 +23,9 @@ class_name HaircutController
 @onready var style_buttons: Control = $StyleButtons
 @onready var style_left_part: Button = $StyleButtons/StyleLeftPart
 @onready var style_fluffy: Button = $StyleButtons/StyleFluffy
+@onready var tutorial_panel: Panel = $HaircutTutorial
+@onready var tutorial_close: Button = $HaircutTutorial/TutorialClose
+@onready var haircut_emotion_label: Label = $HaircutEmotionLabel
 
 var selected_tool: String = ""
 var history: Array = []
@@ -30,6 +33,7 @@ var max_history: int = 10
 var timer: float = 0.0
 var is_timing: bool = true
 var selected_style: String = "none"
+var customer_comfort: int = 0
 
 
 func _ready() -> void:
@@ -46,6 +50,11 @@ func _ready() -> void:
 	_update_tool_highlight()
 	confirm_panel.hide()
 	style_buttons.hide()
+	
+	if GameState.haircut_tutorial_dismissed:
+		tutorial_panel.hide()
+	else:
+		tutorial_close.connect("pressed", Callable(self, "_dismiss_tutorial"))
 	
 	_save_state()
 
@@ -87,6 +96,8 @@ func _select_tool(tool: String) -> void:
 	selected_tool = tool
 	style_buttons.hide()
 	_update_tool_highlight()
+	
+	_dismiss_tutorial()
 	
 	var tool_name: String = _tool_name(tool)
 	var tool_desc: String = _tool_description(tool)
@@ -379,8 +390,37 @@ func _update_need_hint() -> void:
 		need_hint_label.text = "需求：" + cust_data.get("visible_request", "")
 
 
+func _dismiss_tutorial() -> void:
+	if is_instance_valid(tutorial_panel) and tutorial_panel.visible:
+		tutorial_panel.hide()
+		GameState.haircut_tutorial_dismissed = true
+
+
 func _update_customer_comfort(change: int) -> void:
-	pass
+	customer_comfort += change
+	var cust_data: Dictionary = GameState.get_current_customer_data()
+	var emotion_str: String = cust_data.get("initial_emotion", "nervous")
+	
+	if customer_comfort <= -2:
+		emotion_str = "worried"
+	elif customer_comfort <= -1:
+		emotion_str = "nervous"
+	elif customer_comfort >= 2:
+		emotion_str = "relaxed"
+	elif customer_comfort >= 1:
+		emotion_str = "trusting"
+	
+	_update_emotion_display(emotion_str)
+
+
+func _update_emotion_display(emo_str: String) -> void:
+	var mapping: Dictionary = {
+		"nervous": "有些紧张", "neutral": "平静", "relaxed": "放松了一些",
+		"trusting": "比较信任", "worried": "有些担心", "satisfied": "非常满意",
+		"disappointed": "有些失望", "interested": "感兴趣"
+	}
+	haircut_emotion_label.text = "客人情绪：" + mapping.get(emo_str, "平静")
+	haircut_emotion_label.show()
 
 
 func _on_finish_pressed() -> void:
