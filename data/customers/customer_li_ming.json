@@ -1,0 +1,9 @@
+{
+  "id": "li_ming",
+  "name": "李明",
+  "gender": "male",
+  "visible_request": "稍微剪短一点，看起来精神些。",
+  "hidden_need": "明天参加第一次正式工作面试，希望显得可靠，但不希望变化太夸张。",
+  "personality": "nervous_and_conservative",
+  "target_hairstyle_id": "interview_side_part"
+}

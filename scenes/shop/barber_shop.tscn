@@ -1,0 +1,105 @@
+[gd_scene load_steps=5 format=3 uid="uid://barber_shop"]
+
+[ext_resource type="Script" path="res://scripts/shop/barber_shop.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://barber" path="res://scenes/characters/barber.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://customer" path="res://scenes/characters/customer.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dialogue_panel" path="res://scenes/ui/dialogue_panel.tscn" id="4"]
+
+[node name="BarberShop" type="Node2D"]
+script = ExtResource("1")
+
+[node name="ShopBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.95, 0.88, 0.75, 1)
+
+[node name="FloorArea" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 200.0
+offset_right = 1280.0
+offset_bottom = 500.0
+color = Color(0.55, 0.35, 0.2, 1)
+
+[node name="BarberChair" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 470.0
+offset_top = 300.0
+offset_right = 570.0
+offset_bottom = 400.0
+color = Color(0.6, 0.2, 0.2, 1)
+
+[node name="Mirror" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 440.0
+offset_top = 200.0
+offset_right = 600.0
+offset_bottom = 280.0
+color = Color(0.8, 0.85, 0.9, 0.5)
+
+[node name="Counter" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 180.0
+offset_top = 280.0
+offset_right = 350.0
+offset_bottom = 400.0
+color = Color(0.7, 0.6, 0.4, 1)
+
+[node name="Entrance" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 320.0
+offset_right = 150.0
+offset_bottom = 480.0
+color = Color(0.9, 0.8, 0.6, 1)
+
+[node name="Barber" parent="." instance=ExtResource("2")]
+position = Vector2(200, 350)
+
+[node name="Customer" parent="." instance=ExtResource("3")]
+position = Vector2(750, 250)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="InteractLabel" type="Label" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 440.0
+offset_top = 120.0
+offset_right = 840.0
+offset_bottom = 150.0
+text = "走近客人开始交谈"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="TalkButton" type="Button" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 490.0
+offset_top = 155.0
+offset_right = 790.0
+offset_bottom = 200.0
+text = "与客人交谈"
+theme_override_font_sizes/font_size = 20
+
+[node name="DialoguePanel" parent="CanvasLayer" instance=ExtResource("4")]
+visible = false
+
+[node name="TransitionOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0)
+mouse_filter = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="pressed" from="CanvasLayer/TalkButton" to="." method="_on_talk_button_pressed"]

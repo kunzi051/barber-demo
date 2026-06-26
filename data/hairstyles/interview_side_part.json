@@ -1,0 +1,13 @@
+{
+  "id": "interview_side_part",
+  "name": "自然短侧分",
+  "regions": {
+    "bangs": 2,
+    "top": 2,
+    "left_side": 1,
+    "right_side": 1,
+    "back": 1
+  },
+  "parting": "left",
+  "styled": true
+}
