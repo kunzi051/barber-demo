@@ -1,0 +1,18 @@
+{
+  "id": "chen_yu_scoring",
+  "weights": {
+    "region_accuracy": 45,
+    "style_match": 25,
+    "understanding_bonus": 10,
+    "hidden_need_bonus": 10,
+    "mistake_penalty": -5,
+    "efficiency_bonus": 5
+  },
+  "region_mapping": {
+    "bangs": "bangs",
+    "top": "top",
+    "left_side": "left_side",
+    "right_side": "right_side",
+    "back": "back"
+  }
+}

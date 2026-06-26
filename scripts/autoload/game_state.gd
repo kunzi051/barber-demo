@@ -39,7 +39,7 @@ func _ready() -> void:
 
 
 func reset_demo() -> void:
-	customer_queue = ["li_ming"]
+	customer_queue = ["li_ming", "chen_yu"]
 	current_customer_index = 0
 	load_current_customer()
 	

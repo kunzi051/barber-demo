@@ -1,0 +1,11 @@
+{
+  "name": "基础长直发",
+  "style_type": "none",
+  "regions": {
+    "bangs": 3,
+    "top": 3,
+    "left_side": 3,
+    "right_side": 3,
+    "back": 3
+  }
+}

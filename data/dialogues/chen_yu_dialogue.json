@@ -1,0 +1,152 @@
+{
+  "id": "chen_yu_dialogue",
+  "intro": "你好！明天就是毕业典礼了，我想做个好看的发型！",
+  "summary": "明白了，蓬松有层次感又活泼的毕业造型，交给我吧！",
+  "rounds": [
+    {
+      "id": "greeting",
+      "speaker": "customer",
+      "text": "哈喽！明天毕业典礼，想弄个好看的发型拍照！",
+      "options": [
+        {
+          "text": "毕业快乐呀！想要什么样的风格？",
+          "next_round": "ask_need",
+          "effects": {
+            "trust": 1,
+            "understanding": 2,
+            "emotion": "relaxed"
+          }
+        },
+        {
+          "text": "恭喜毕业！有什么想法吗？",
+          "next_round": "ask_need",
+          "effects": {
+            "trust": 1,
+            "understanding": 1,
+            "emotion": "interested"
+          }
+        },
+        {
+          "text": "好的，坐下说吧。",
+          "next_round": "ask_need",
+          "effects": {
+            "trust": 0,
+            "understanding": 0,
+            "emotion": "neutral"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ask_need",
+      "speaker": "customer",
+      "text": "我想要蓬松一点，有层次感的那种！但不要太夸张，适合正式场合。",
+      "options": [
+        {
+          "text": "蓬松层次加一点自然的弧度，很适合毕业照！",
+          "next_round": "detail",
+          "effects": {
+            "trust": 1,
+            "understanding": 2,
+            "emotion": "relaxed"
+          }
+        },
+        {
+          "text": "要不要试试蓬松整理造型？显得活泼又大方。",
+          "next_round": "hidden_need",
+          "effects": {
+            "trust": 2,
+            "understanding": 3,
+            "revealed_hidden_need": true,
+            "emotion": "satisfied"
+          }
+        },
+        {
+          "text": "明白了，就是把头发弄蓬松一些。",
+          "next_round": "detail",
+          "effects": {
+            "trust": 0,
+            "understanding": 1,
+            "emotion": "neutral"
+          }
+        }
+      ]
+    },
+    {
+      "id": "detail",
+      "speaker": "customer",
+      "text": "嗯嗯！而且我希望看起来成熟一点，毕竟要工作了，但也不要太老气。",
+      "options": [
+        {
+          "text": "蓬松层次正好能兼顾成熟和活泼，我帮你打造自然的蓬松感。",
+          "next_round": "hidden_need",
+          "effects": {
+            "trust": 2,
+            "understanding": 3,
+            "revealed_hidden_need": true,
+            "emotion": "trusting"
+          }
+        },
+        {
+          "text": "那你想要偏成熟一些还是活泼一些？",
+          "next_round": "hidden_need",
+          "effects": {
+            "trust": 1,
+            "understanding": 2,
+            "emotion": "interested"
+          }
+        },
+        {
+          "text": "好，我在蓬松的基础上给你修得更有型一些。",
+          "next_round": "confirm",
+          "effects": {
+            "trust": 1,
+            "understanding": 1,
+            "emotion": "relaxed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hidden_need",
+      "speaker": "customer",
+      "text": "对对对，我就是想要这种感觉！你太懂我了！要拍照好看，又不想太幼稚。",
+      "options": [
+        {
+          "text": "放心吧，一定让你在毕业典礼上美美的！",
+          "next_round": "",
+          "effects": {
+            "trust": 2,
+            "understanding": 1,
+            "emotion": "satisfied"
+          }
+        },
+        {
+          "text": "那就交给我啦，你的毕业造型包在我身上。",
+          "next_round": "",
+          "effects": {
+            "trust": 1,
+            "understanding": 0,
+            "emotion": "interested"
+          }
+        }
+      ]
+    },
+    {
+      "id": "confirm",
+      "speaker": "customer",
+      "text": "好呀好呀，那麻烦你了！",
+      "next_round": "",
+      "options": [
+        {
+          "text": "不客气，期待你的毕业照！",
+          "effects": {
+            "trust": 1,
+            "understanding": 0,
+            "emotion": "relaxed"
+          }
+        }
+      ]
+    }
+  ]
+}

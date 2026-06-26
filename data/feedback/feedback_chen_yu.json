@@ -1,0 +1,22 @@
+{
+  "id": "chen_yu_feedback",
+  "templates": {
+    "high_score": "哇！太棒了！这个发型就是我想象中的样子！毕业照一定很好看！",
+    "medium_score": "整体效果不错，显得很有精神。",
+    "low_score": "嗯...感觉和我想的有一点点不一样，不过也还行。",
+    "top_too_short": "头顶好像比预想薄了一些。",
+    "bangs_too_short": "刘海剪得有点多了。",
+    "sides_too_short": "两边短了一点，层次感不太够。",
+    "sides_too_long": "两边还可以再修一下层次。",
+    "style_mismatch": "如果蓬松一点就更好了。",
+    "good_understanding_average_haircut": "你确实理解了我想要的感觉。",
+    "low_understanding": "感觉我说的和做出来的不太一样。"
+  },
+  "region_comments": {
+    "bangs": "刘海",
+    "top": "顶部",
+    "left_side": "左侧",
+    "right_side": "右侧",
+    "back": "后脑"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "chen_yu",
+  "name": "陈雨",
+  "age": 22,
+  "gender": "female",
+  "visible_request": "毕业典礼想要蓬松有层次感的发型",
+  "hidden_need": "想要看起来成熟一些但不失活泼",
+  "initial_emotion": "interested",
+  "initial_hairstyle_file": "res://data/hairstyles/chen_yu_initial.json",
+  "target_hairstyle_id": "graduation_fluffy_style",
+  "target_hairstyle_file": "res://data/hairstyles/graduation_fluffy_style.json",
+  "dialogue_file": "res://data/dialogues/chen_yu_dialogue.json",
+  "scoring_profile_file": "res://data/scoring/scoring_profile_chen_yu.json",
+  "feedback_file": "res://data/feedback/feedback_chen_yu.json",
+  "visual_profile": {
+    "shirt_color": "0.9,0.5,0.5",
+    "skin_tone": "0.98,0.88,0.75",
+    "hair_color": "0.2,0.12,0.08",
+    "pants_color": "0.4,0.2,0.5"
+  }
+}
