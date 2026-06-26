@@ -27,7 +27,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var parent: Node2D = get_parent() as Node2D
-	if parent and parent.has_method("is_moving") and parent.is_moving:
+	if parent and "is_moving" in parent and parent.is_moving:
 		move_bob += delta * 8.0
 		var bob_offset: float = sin(move_bob) * 2.0
 		left_leg.position.y = 24 + bob_offset

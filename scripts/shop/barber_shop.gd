@@ -129,6 +129,7 @@ func _check_interaction() -> void:
 
 func _on_talk_button_pressed() -> void:
 	if dialogue_finished:
+		_on_start_haircut_pressed()
 		return
 	_start_dialogue()
 

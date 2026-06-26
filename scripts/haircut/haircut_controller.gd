@@ -69,11 +69,11 @@ func _apply_initial_hair_positions() -> void:
 
 
 func _connect_regions() -> void:
-	hair_bangs.connect("region_clicked", Callable(self, "_on_region_clicked").bind("bangs"))
-	hair_top.connect("region_clicked", Callable(self, "_on_region_clicked").bind("top"))
-	hair_left.connect("region_clicked", Callable(self, "_on_region_clicked").bind("left_side"))
-	hair_right.connect("region_clicked", Callable(self, "_on_region_clicked").bind("right_side"))
-	hair_back.connect("region_clicked", Callable(self, "_on_region_clicked").bind("back"))
+	hair_bangs.connect("region_clicked", Callable(self, "_on_region_clicked"))
+	hair_top.connect("region_clicked", Callable(self, "_on_region_clicked"))
+	hair_left.connect("region_clicked", Callable(self, "_on_region_clicked"))
+	hair_right.connect("region_clicked", Callable(self, "_on_region_clicked"))
+	hair_back.connect("region_clicked", Callable(self, "_on_region_clicked"))
 
 
 func _connect_tools() -> void:
